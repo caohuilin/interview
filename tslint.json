@@ -1,0 +1,66 @@
+{
+  "extends": "tslint:latest",
+  "rulesDirectory": ["tslint-microsoft-contrib"],
+  "rules": {
+    "semicolon": false,
+    "quotemark": [true, "single", "jsx-double", "avoid-escape"],
+    "no-var-requires": false,
+    "member-access": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ],
+    "object-literal-key-quotes": [false],
+    "object-literal-sort-keys": false,
+    "member-ordering": [false],
+    "no-string-literal": false,
+    "no-console": [true, "debug", "info", "time", "timeEnd", "trace", "log"],
+    "comment-format": [true, "check-space"],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "space",
+        "index-signature": "space",
+        "parameter": "space",
+        "property-declaration": "space",
+        "variable-declaration": "space"
+      }
+    ],
+    "ordered-imports": [false],
+    "only-arrow-functions": [false],
+    "no-consecutive-blank-lines": true,
+    "no-empty-interface": false,
+    "no-empty": false,
+    "arrow-parens": false,
+    "no-this-assignment": false,
+    "no-object-literal-type-assertion": false,
+    "jsdoc-format": false,
+    "variable-name": [true, "ban-keywords"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type"
+    ],
+    "align": [true, "parameters", "statements"],
+    "max-classes-per-file": false,
+    "no-shadowed-variable": false,
+    "prefer-conditional-expression": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "array-type": [true, "array-simple"]
+  }
+}
