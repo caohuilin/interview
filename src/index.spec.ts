@@ -1,9 +1,17 @@
-function addTwoSum(a: number, b: number) {
-  return a + b;
+type ParamType<T> = T extends (param: infer P) => any ? P : T;
+
+type Caller<T extends (...args: any[]) => any> = () => ParamType<T>;
+
+function tx(x: string) {
+  return x;
 }
+
+const caller: Caller<typeof tx> = () => {
+  return "x";
+};
 
 describe("two sum", () => {
   it("1 + 2", () => {
-    expect(addTwoSum(1, 2)).toBe(3);
+    expect(caller()).toEqual("x");
   });
 });
