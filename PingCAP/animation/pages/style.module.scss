@@ -1,0 +1,6 @@
+.home {
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-between;
+  height: 1400px; // 瀑布流布局需要设置height 可根据需求调整
+}
