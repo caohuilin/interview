@@ -1,0 +1,12 @@
+.hidden {
+  visibility: hidden;
+}
+.doneElement {
+  visibility: hidden;
+}
+.motionElement {
+  position: fixed;
+  transform-origin: 0 0 0;
+  transition: transform ease-in-out 0.5s;
+  z-index: 100;
+}
