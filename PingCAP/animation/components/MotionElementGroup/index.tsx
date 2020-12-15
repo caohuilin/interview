@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export enum MotionStatus {
   Initial = "initial", // 初始状态
@@ -41,7 +41,7 @@ export default function MotionElementGroup(
     }
   }, [isActive]);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     switch (status) {
       case MotionStatus.Calculating:
         setStatus(MotionStatus.Animating);

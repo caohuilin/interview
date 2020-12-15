@@ -1,8 +1,7 @@
-import {
+import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -58,7 +57,7 @@ export default function MotionElement({
     }
   }, [status]);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (status === MotionStatus.Reseting) {
       setPositionStyle({ top: 0, left: 0 });
       setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
