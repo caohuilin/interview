@@ -10,20 +10,14 @@ import { Cards } from "../constants/cards";
 import styles from "./style.module.scss";
 
 export default function Home() {
-  // const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<number | null>(null);
 
-  // const handleActive = (index: number) => {
-  //   setActive(index);
-  // };
+  const handleActive = (index: number) => {
+    setActive(index);
+  };
 
-  // const handleResetActive = () => {
-  //   setActive(null);
-  // };
-
-  const [isActive, setActive] = useState(false);
-
-  const handleLoad = () => {
-    console.log("handleLoad image");
+  const handleResetActive = () => {
+    setActive(null);
   };
 
   return (
@@ -31,22 +25,26 @@ export default function Home() {
       <Head>
         <title>animation</title>
       </Head>
-      <MotionElementGroup isActive={isActive}>
-        <MotionElement
-          initClassName={styles.imgWrapper}
-          activeClassName={classnames(styles.imgWrapper, styles.active)}
-        >
-          {() => (
-            <img
-              onLoad={handleLoad}
-              className={styles.img}
-              onClick={() => setActive(true)}
-              src="https://img.pingcap.com/fe-hire/3-img-1.jpg"
-            />
-          )}
-        </MotionElement>
-      </MotionElementGroup>
-      {/* <MenuIcon isActive={active !== null} resetActive={handleResetActive} /> */}
+      <MenuIcon isActive={active !== null} resetActive={handleResetActive} />
+      {Cards.map((card, index) => {
+        return (
+          <MotionElementGroup isActive={active === index} key={index}>
+            <MotionElement
+              initClassName={styles.imgWrapper}
+              activeClassName={classnames(styles.imgWrapper, styles.active)}
+            >
+              {() => (
+                <img
+                  className={styles.img}
+                  onClick={() => handleActive(index)}
+                  src={card.img}
+                />
+              )}
+            </MotionElement>
+          </MotionElementGroup>
+        );
+      })}
+
       {/* {Cards.map((card, index) => (
         <Card
           key={index}

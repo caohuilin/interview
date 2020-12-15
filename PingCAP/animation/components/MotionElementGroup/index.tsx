@@ -5,6 +5,7 @@ export enum MotionStatus {
   Calculating = "calculating", // 计算动画相关参数
   Animating = "animating", // 动画中
   Done = "done", // 结束
+  Reseting = "reseting", // 重置中
 }
 
 interface IMotionContextValue {
@@ -35,7 +36,7 @@ export default function MotionElementGroup(
       }
     } else {
       if (status !== MotionStatus.Initial) {
-        setStatus(MotionStatus.Initial);
+        setStatus(MotionStatus.Reseting);
       }
     }
   }, [isActive]);
@@ -47,8 +48,12 @@ export default function MotionElementGroup(
         break;
       case MotionStatus.Animating:
         setStatus(MotionStatus.Done);
+        break;
+      case MotionStatus.Reseting:
+        setStatus(MotionStatus.Initial);
+        break;
     }
-  });
+  }, [status]);
 
   return (
     <MotionContext.Provider value={contextValue}>

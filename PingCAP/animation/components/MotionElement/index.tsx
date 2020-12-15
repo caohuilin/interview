@@ -1,5 +1,14 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import classnames from "classnames";
+import usePrevious from "../../hooks/usePrevious";
 import { MotionContext, MotionStatus } from "../MotionElementGroup";
 
 import styles from "./style.module.scss";
@@ -26,17 +35,20 @@ export default function MotionElement({
   children,
 }: IMotionElementnProps) {
   const { status } = useContext(MotionContext);
+  const preStatus = usePrevious(status);
 
   const render = useRef<RenderRefMap>({});
   const initElement = useRef<HTMLDivElement>(null);
   const doneElement = useRef<HTMLDivElement>(null);
 
+  const [positionStyle, setPositionStyle] = useState({ top: 0, left: 0 });
   const [transformParams, setTransformParams] = useState({
     x: 0,
     y: 0,
     scaleX: 1,
     scaleY: 1,
   });
+  const [isAnimating, setIsAnimating] = useState(false); // 标记是否在动画中
 
   useEffect(() => {
     if (status === MotionStatus.Initial) {
@@ -46,16 +58,25 @@ export default function MotionElement({
     }
   }, [status]);
 
-  let positionStyle = { top: 0, left: 0 };
-  if (initElement.current) {
-    const box = initElement.current.getBoundingClientRect();
-    positionStyle = { top: box.top, left: box.left };
-  }
+  useLayoutEffect(() => {
+    if (status === MotionStatus.Reseting) {
+      setPositionStyle({ top: 0, left: 0 });
+      setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
+      setIsAnimating(true);
+    }
+    if (status === MotionStatus.Initial && initElement.current) {
+      const box = initElement.current.getBoundingClientRect();
+      setPositionStyle({ top: box.top, left: box.left });
+    }
+  }, [status]);
 
   const transformStyle = useMemo(() => {
     let { x, y, scaleX, scaleY } = transformParams;
-    if (status === MotionStatus.Initial) {
-      setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
+    if (status === MotionStatus.Reseting) {
+      x = 0;
+      y = 0;
+      scaleX = 1;
+      scaleY = 1;
     }
     if (
       status === MotionStatus.Animating &&
@@ -75,10 +96,19 @@ export default function MotionElement({
     };
   }, [status]);
 
+  const handleTransitionEnd = useCallback(() => {
+    if (
+      status === MotionStatus.Initial &&
+      preStatus === MotionStatus.Reseting
+    ) {
+      setIsAnimating(false);
+    }
+  }, [status]);
+
   const { initial } = render.current;
   const isInitial = status === MotionStatus.Initial;
   const showInitial =
-    status === MotionStatus.Initial || status === MotionStatus.Calculating;
+    (isInitial && !isAnimating) || status === MotionStatus.Calculating;
   return (
     <>
       {/**
@@ -104,10 +134,11 @@ export default function MotionElement({
       {/**
        *  动画状态 div
        */}
-      {!isInitial && (
+      {(!isInitial || isAnimating) && (
         <div
           className={classnames(initClassName, styles.motionElement)}
           style={{ ...positionStyle, ...transformStyle }}
+          onTransitionEnd={handleTransitionEnd}
         >
           {initial ? initial() : children()}
         </div>
