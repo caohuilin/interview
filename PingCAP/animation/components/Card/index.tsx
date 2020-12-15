@@ -38,7 +38,7 @@ export default function Card(props: ICardProps) {
       const docHeight = document.documentElement.clientHeight;
       const box = imgElement.current.getBoundingClientRect();
       const { width, height, top, left } = box;
-      scale = Math.min(docWidth / 2.5 / width, docHeight / height);
+      scale = Math.min(docWidth / 2.5 / width, docHeight / 1.2 / height);
       x = -left + docWidth - width * scale - ImageRight;
       y = -top + (docHeight - height * scale) / 2;
     }
@@ -77,7 +77,7 @@ export default function Card(props: ICardProps) {
     ) {
       const parentBox = backgroundElement.current.getBoundingClientRect();
       const box = cardBackgroundElement.current.getBoundingClientRect();
-      scaleY = 1.4;
+      scaleY = 1.4; // todo 计算比例
       y = parentBox.height * 0.4;
     }
     return {
@@ -96,7 +96,7 @@ export default function Card(props: ICardProps) {
       const imageWidth = imgElement.current.clientWidth;
       const { width, top, left } = box;
       scale = 1.2;
-      x = -left + (docWidth - imageWidth - ImageRight - width) / 2;
+      x = -left + (docWidth - imageWidth - ImageRight - width) / 3;
       y = -top + docHeight * 0.35;
     }
     return {
@@ -113,7 +113,7 @@ export default function Card(props: ICardProps) {
       const titleWidth = titleElement.current.clientWidth;
       const box = descElement.current.getBoundingClientRect();
       const { left } = box;
-      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 2 - 20;
+      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 3 - 20;
     }
     if (isActive) {
       y = 20;
@@ -133,7 +133,7 @@ export default function Card(props: ICardProps) {
       const titleWidth = titleElement.current.clientWidth;
       const box = descElement.current.getBoundingClientRect();
       const { left } = box;
-      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 2 - 20;
+      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 3 - 20;
     }
     if (isActive) {
       y = 20;
