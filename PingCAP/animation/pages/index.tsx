@@ -1,18 +1,26 @@
-import Head from "next/head";
 import { useState } from "react";
+import Head from "next/head";
+import classnames from "classnames";
 import Card from "../components/Card";
 import { Cards } from "../constants/cards";
 
-import style from "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function Home() {
   const [active, setActive] = useState<number | null>(null);
 
   const handleActive = (index: number) => {
-    setActive(index);
+    if (active === null) {
+      setActive(index);
+    } else {
+      setActive(null);
+    }
   };
+
   return (
-    <div className={style.home}>
+    <div
+      className={classnames(styles.home, { [styles.fixed]: active !== null })}
+    >
       <Head>
         <title>animation</title>
       </Head>
