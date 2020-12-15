@@ -17,6 +17,7 @@ export default function Card(props: ICardProps) {
   const cardElement = useRef<HTMLDivElement>(null);
   const imgElement = useRef<HTMLImageElement>(null);
   const backgroundElement = useRef<HTMLDivElement>(null);
+  const cardBackgroundElement = useRef<HTMLDivElement>(null);
   const titleElement = useRef<HTMLDivElement>(null);
   const descElement = useRef<HTMLParagraphElement>(null);
   const dividerElement = useRef<HTMLDivElement>(null);
@@ -57,12 +58,30 @@ export default function Card(props: ICardProps) {
       const box = backgroundElement.current.getBoundingClientRect();
       const { width, height, top, left } = box;
       scaleX = docWidth / width;
-      scaleY = (docHeight * 0.6) / height;
+      scaleY = docHeight / height;
       x = -left;
-      y = -top + docHeight * 0.4;
+      y = -top;
     }
     return {
       transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY}) `,
+    };
+  }, [isActive]);
+
+  const cardBackgroundStyle = useMemo(() => {
+    let scaleY = 1;
+    let y = 0;
+    if (
+      isActive &&
+      cardBackgroundElement.current &&
+      backgroundElement.current
+    ) {
+      const parentBox = backgroundElement.current.getBoundingClientRect();
+      const box = cardBackgroundElement.current.getBoundingClientRect();
+      scaleY = 1.4;
+      y = parentBox.height * 0.4;
+    }
+    return {
+      transform: `translateY(${y}px) scale(1, ${scaleY})`,
     };
   }, [isActive]);
 
@@ -134,18 +153,24 @@ export default function Card(props: ICardProps) {
     >
       <div className={classnames(styles.item, { [styles.active]: isActive })}>
         <figure>
-          <img
-            className={styles.img}
-            src={img}
-            alt="title"
+          <div
+            className={styles.imgWrapper}
             ref={imgElement}
             style={imageStyle}
-          />
+          >
+            <img className={styles.img} src={img} alt="title" />
+          </div>
           <div
             className={styles.background}
             ref={backgroundElement}
             style={backgroundStyle}
-          ></div>
+          >
+            <div
+              className={styles.cardBackground}
+              ref={cardBackgroundElement}
+              style={cardBackgroundStyle}
+            />
+          </div>
           <figcaption>
             <div className={styles.title} ref={titleElement} style={titleStyle}>
               {title}

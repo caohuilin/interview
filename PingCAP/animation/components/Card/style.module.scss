@@ -28,6 +28,17 @@
       opacity: 1;
       visibility: visible;
     }
+    .cardBackground {
+      height: 45%;
+    }
+    .img {
+      transform-origin: 0, 0, 0;
+      animation-direction: alternate;
+      animation-timing-function: ease-in-out;
+      animation-name: bounceIn;
+      animation-delay: 0.5s;
+      animation-duration: 0.5s;
+    }
   }
   .item {
     position: relative;
@@ -41,11 +52,19 @@
   figcaption {
     width: 100%;
   }
-  .img {
+  .imgWrapper {
     transform-origin: 0 0 0;
-    display: block;
-    height: 300px;
     transition: all ease-in-out 0.5s;
+    .img {
+      display: block;
+      height: 300px;
+    }
+  }
+  .cardBackground {
+    background: #f3eeeb;
+    height: 100%;
+    position: relative;
+    transform-origin: 0 0 0;
   }
   .background {
     position: absolute;
@@ -54,7 +73,7 @@
     bottom: 50px;
     width: 80%;
     height: 40%;
-    background: #f3eeeb;
+    background: #ffffff;
     z-index: -1;
     transform-origin: 0 0 0;
     transition: all ease-in-out 0.5s;
@@ -84,5 +103,29 @@
     position: fixed;
     top: calc(40% + 20px);
     transition: transform ease-in-out 0.5s 0.5s, opacity ease-in-out 0.2s 0.5s;
+  }
+}
+
+:global {
+  @keyframes bounceIn {
+    0% {
+      transform: scale3d(1, 1, 1);
+    }
+
+    20% {
+      transform: scale3d(1.02, 1.02, 1);
+    }
+
+    50% {
+      transform: scale3d(1.05, 1.05, 1);
+    }
+
+    80% {
+      transform: scale3d(1.02, 1.02, 1);
+    }
+
+    to {
+      transform: scale3d(1, 1, 1);
+    }
   }
 }
