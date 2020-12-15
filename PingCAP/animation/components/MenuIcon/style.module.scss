@@ -1,0 +1,56 @@
+.menuIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 1px;
+  overflow: hidden;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  z-index: 1000;
+}
+.checkbox {
+  display: none;
+}
+.label {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.iconMenu,
+.iconMenu::before,
+.iconMenu::after {
+  width: 18px;
+  height: 3px;
+  background-color: black;
+  display: block;
+  transition: all 0.5s ease-in-out;
+}
+.iconMenu {
+  position: relative;
+}
+.iconMenu::before,
+.iconMenu::after {
+  position: absolute;
+  content: "";
+}
+.iconMenu::before {
+  top: -6px;
+}
+.iconMenu::after {
+  top: 6px;
+}
+
+.checkbox:checked ~ label .iconMenu {
+  transform: rotate(225deg);
+}
+.checkbox:checked ~ label .iconMenu::before {
+  top: 0;
+  transform: rotate(90deg);
+}
+.checkbox:checked ~ label .iconMenu::after {
+  top: 0;
+}
