@@ -15,8 +15,19 @@
     order: 2;
   }
   .active {
-    position: fixed;
     z-index: 100;
+    position: fixed;
+    .desc {
+      opacity: 0;
+    }
+    .desc2 {
+      opacity: 1;
+      visibility: visible;
+    }
+    .divider {
+      opacity: 1;
+      visibility: visible;
+    }
   }
   .item {
     position: relative;
@@ -29,7 +40,6 @@
   }
   figcaption {
     width: 100%;
-    padding-left: 10%;
   }
   .img {
     transform-origin: 0 0 0;
@@ -52,8 +62,27 @@
   .title {
     margin-top: 15%;
     font-size: 20px;
+    transition: all ease-in-out 0.5s;
   }
-  p {
+  .desc {
     font-size: 14px;
+    transition: opacity ease-in-out 0.2s;
+  }
+  .desc2 {
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: 45%;
+    transition: transform ease-in-out 0.5s 0.5s, opacity ease-in-out 0.2s 0.5s;
+  }
+  .divider {
+    width: 50px;
+    height: 4px;
+    background: #000000;
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: calc(40% + 20px);
+    transition: transform ease-in-out 0.5s 0.5s, opacity ease-in-out 0.2s 0.5s;
   }
 }

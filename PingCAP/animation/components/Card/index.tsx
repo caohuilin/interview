@@ -14,9 +14,12 @@ const ImageRight = 64; // 图片放大后距离屏幕右边距离
 export default function Card(props: ICardProps) {
   const { title, desc, img, isActive, onActive } = props;
 
+  const cardElement = useRef<HTMLDivElement>(null);
   const imgElement = useRef<HTMLImageElement>(null);
   const backgroundElement = useRef<HTMLDivElement>(null);
-  const cardElement = useRef<HTMLDivElement>(null);
+  const titleElement = useRef<HTMLDivElement>(null);
+  const descElement = useRef<HTMLParagraphElement>(null);
+  const dividerElement = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState<DOMRect | null>(null);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export default function Card(props: ICardProps) {
       y = -top + (docHeight - height * scale) / 2;
     }
     return {
-      transform: `translate(${x}px, ${y}px) scale(${scale}) `,
+      transform: `translate(${x}px, ${y}px) scale(${scale}, ${scale}) `,
     };
   }, [isActive]);
 
@@ -60,6 +63,65 @@ export default function Card(props: ICardProps) {
     }
     return {
       transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY}) `,
+    };
+  }, [isActive]);
+
+  const titleStyle = useMemo(() => {
+    let scale = 1;
+    let x = 0;
+    let y = 0;
+    if (isActive && titleElement.current && imgElement.current) {
+      const docWidth = document.documentElement.clientWidth;
+      const docHeight = document.documentElement.clientHeight;
+      const box = titleElement.current.getBoundingClientRect();
+      const imageWidth = imgElement.current.clientWidth;
+      const { width, top, left } = box;
+      scale = 1.2;
+      x = -left + (docWidth - imageWidth - ImageRight - width) / 2;
+      y = -top + docHeight * 0.35;
+    }
+    return {
+      transform: `translate(${x}px, ${y}px) scale(${scale}, ${scale}) `,
+    };
+  }, [isActive]);
+
+  const descStyle = useMemo(() => {
+    let x = 0;
+    let y = 0;
+    if (descElement.current && imgElement.current && titleElement.current) {
+      const docWidth = document.documentElement.clientWidth;
+      const imageWidth = imgElement.current.clientWidth;
+      const titleWidth = titleElement.current.clientWidth;
+      const box = descElement.current.getBoundingClientRect();
+      const { left } = box;
+      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 2 - 20;
+    }
+    if (isActive) {
+      y = 20;
+    }
+    return {
+      left: `${x}px`,
+      transform: `translateY(-${y}px)`,
+    };
+  }, [isActive]);
+
+  const dividerStyle = useMemo(() => {
+    let x = 0;
+    let y = 0;
+    if (descElement.current && imgElement.current && titleElement.current) {
+      const docWidth = document.documentElement.clientWidth;
+      const imageWidth = imgElement.current.clientWidth;
+      const titleWidth = titleElement.current.clientWidth;
+      const box = descElement.current.getBoundingClientRect();
+      const { left } = box;
+      x = -left + (docWidth - imageWidth - ImageRight - titleWidth) / 2 - 20;
+    }
+    if (isActive) {
+      y = 20;
+    }
+    return {
+      left: `${x}px`,
+      transform: `translateY(-${y}px)`,
     };
   }, [isActive]);
 
@@ -85,8 +147,18 @@ export default function Card(props: ICardProps) {
             style={backgroundStyle}
           ></div>
           <figcaption>
-            <div className={styles.title}>{title}</div>
-            <p>{desc}</p>
+            <div className={styles.title} ref={titleElement} style={titleStyle}>
+              {title}
+            </div>
+            <div
+              className={styles.divider}
+              ref={dividerElement}
+              style={dividerStyle}
+            />
+            <p className={styles.desc}>{desc}</p>
+            <p className={styles.desc2} ref={descElement} style={descStyle}>
+              {desc}
+            </p>
           </figcaption>
         </figure>
       </div>
