@@ -90,7 +90,7 @@
 
 3. ignoreScale 是否忽略 Scale 变化，默认值为 false。比如字体相关的变化，如果不忽略会变形。
 
-4. children render 函数（RenderPorps 模式。
+4. children render 函数（RenderPorps 模式）。
 
 函数格式： (status: 'init' | 'end') => React.ReachChild
 
