@@ -28,6 +28,10 @@ interface IMotionElementnProps {
    * 激活状态类名
    */
   activeClassName: string;
+  /**
+   * 忽略放大缩小变化
+   */
+  ignoreScale?: boolean;
   children: RenderFunc;
 }
 
@@ -36,6 +40,7 @@ type RenderRefMap = { [key in MotionStatus]?: RenderFunc };
 export default function MotionElement({
   initClassName,
   activeClassName,
+  ignoreScale = false,
   children,
 }: IMotionElementnProps) {
   const { status } = useContext(MotionContext);
@@ -91,14 +96,16 @@ export default function MotionElement({
       const doneBox = doneElement.current.getBoundingClientRect();
       x = doneBox.left - initBox.left;
       y = doneBox.top - initBox.top;
-      scaleX = doneBox.width / initBox.width;
-      scaleY = doneBox.height / initBox.height;
+      if (!ignoreScale) {
+        scaleX = doneBox.width / initBox.width;
+        scaleY = doneBox.height / initBox.height;
+      }
     }
     setTransformParams({ x, y, scaleX, scaleY });
     return {
       transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY}) `,
     };
-  }, [status]);
+  }, [status, ignoreScale]);
 
   const handleTransitionEnd = useCallback(() => {
     if (
@@ -126,7 +133,7 @@ export default function MotionElement({
         ref={initElement}
         className={classnames(initClassName, { [styles.hidden]: !showInitial })}
       >
-        {initial ? initial() : children()}
+        {initial ? initial(ElementStatus.Init) : children(ElementStatus.Init)}
       </div>
       {/**
        *  终止状态 div
@@ -136,7 +143,7 @@ export default function MotionElement({
           ref={doneElement}
           className={classnames(activeClassName, styles.doneElement)}
         >
-          {children()}
+          {children(ElementStatus.End)}
         </div>
       )}
       {/**
