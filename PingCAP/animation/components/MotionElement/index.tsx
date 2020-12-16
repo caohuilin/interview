@@ -74,7 +74,10 @@ export default function MotionElement({
       setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
       setIsAnimating(true);
     }
-    if (status === MotionStatus.Initial && initElement.current) {
+    if (
+      (status === MotionStatus.Initial || needReCompute) &&
+      initElement.current
+    ) {
       const box = initElement.current.getBoundingClientRect();
       setPositionStyle({ top: box.top, left: box.left });
     }
@@ -95,14 +98,14 @@ export default function MotionElement({
 
   const transformStyle = useMemo(() => {
     let { x, y, scaleX, scaleY } = transformParams;
-    if (status === MotionStatus.Reseting) {
+    if (status === MotionStatus.Reseting || needReCompute) {
       x = 0;
       y = 0;
       scaleX = 1;
       scaleY = 1;
     }
     if (
-      status === MotionStatus.Animating &&
+      (status === MotionStatus.Animating || needReCompute) &&
       initElement.current &&
       doneElement.current
     ) {
