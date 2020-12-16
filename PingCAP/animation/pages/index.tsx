@@ -19,11 +19,13 @@ export default function Home() {
   };
 
   return (
-    <div className={classnames(styles.home)}>
+    <div
+      className={classnames(styles.home, { [styles.active]: active !== null })}
+    >
       <Head>
         <title>animation</title>
       </Head>
-      <MenuIcon isActive={active !== null} resetActive={handleResetActive} />
+      <MenuIcon isActive={active !== null} onResetActive={handleResetActive} />
       <div className={styles.left}>
         {Cards.filter((_, index) => index % 2).map((card, index) => (
           <Card

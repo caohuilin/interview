@@ -9,9 +9,6 @@
   right: 40px;
   z-index: 1000;
 }
-.checkbox {
-  display: none;
-}
 .label {
   width: 24px;
   height: 24px;
@@ -44,13 +41,13 @@
   top: 6px;
 }
 
-.checkbox:checked ~ label .iconMenu {
+.active .label .iconMenu {
   transform: rotate(225deg);
 }
-.checkbox:checked ~ label .iconMenu::before {
+.active .label .iconMenu::before {
   top: 0;
   transform: rotate(90deg);
 }
-.checkbox:checked ~ label .iconMenu::after {
+.active .label .iconMenu::after {
   top: 0;
 }
