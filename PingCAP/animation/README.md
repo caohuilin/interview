@@ -101,3 +101,22 @@
 1. 获取上下文的状态来维护内部三个 dom 副本的渲染逻辑。
 
 2. 通过 onTransitionEnd 来判断是否动画结束，维护了一个 isAnimating 状态。渲染过程中状态变化不会等待动画的完成，维护这样一个状态，来标记动画中间态。
+
+## 使用姿势
+
+```
+<MotionElementGroup isActive={false}>
+    <MotionElement initClassName={initClassName} activeClassName={activeClassName}>
+        (status) => {
+            // TODO 根据 status 生成一些 props 给 img
+            return (<img src={src} />)
+        }
+    </MotionElement>
+</MotionElementGroup>
+```
+
+## 目前存在问题
+
+[ ] 当卡片处于 active 状态时，拖动屏幕大小，样式计算有误。
+
+[ ] 流式布局暂且使用两列 dom 模拟，需使用 grid 布局重构。
