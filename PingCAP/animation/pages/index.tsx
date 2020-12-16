@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import classnames from "classnames";
 import Card from "../components/Card";
@@ -17,6 +17,30 @@ export default function Home() {
   const handleResetActive = () => {
     setActive(null);
   };
+
+  const disableWheel = (e: any) => {
+    e.preventDefault(0);
+  };
+
+  const disablekeyDown = (e: any) => {
+    if (e.key == "ArrowDown" || e.key == "ArrowUp") {
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    if (active === null) {
+      window.removeEventListener("wheel", disableWheel);
+      window.removeEventListener("keydown", disablekeyDown);
+    } else {
+      window.addEventListener("wheel", disableWheel, { passive: false });
+      window.addEventListener("keydown", disablekeyDown, { passive: false });
+    }
+    return () => {
+      window.removeEventListener("wheel", disableWheel);
+      window.removeEventListener("keydown", disablekeyDown);
+    };
+  }, [active]);
 
   return (
     <div
