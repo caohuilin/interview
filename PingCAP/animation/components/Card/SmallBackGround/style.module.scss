@@ -1,0 +1,22 @@
+.wrapper {
+  height: 210px;
+  width: 240px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 120px;
+  z-index: -1;
+  opacity: 1;
+  .background {
+    height: 100%;
+    width: 100%;
+    background: #f3eeeb;
+  }
+}
+
+.active {
+  position: fixed;
+  width: 100vw;
+  height: 60vh;
+  top: 40%;
+}

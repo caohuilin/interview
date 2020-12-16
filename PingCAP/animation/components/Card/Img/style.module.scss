@@ -1,0 +1,39 @@
+.wrapper {
+  .img {
+    display: block;
+    height: 300px;
+    width: 200px;
+  }
+  .end {
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+    animation-name: bounceIn;
+    animation-delay: 0.5s;
+    animation-duration: 1s;
+  }
+}
+
+.active {
+  position: fixed;
+  top: 50%;
+  right: 100px;
+  transform: translateY(-50%);
+  .img {
+    height: 600px;
+    width: 400px;
+  }
+}
+
+:global {
+  @keyframes bounceIn {
+    0% {
+      transform: scale3d(1, 1, 1);
+    }
+    50% {
+      transform: scale3d(1.05, 1.05, 1);
+    }
+    100% {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@import "../../../styles/variable.scss";
+
+.wrapper {
+  .title {
+    transition: all ease-in-out $transition-duration;
+  }
+  .init {
+    margin-top: 50px;
+    font-size: 20px;
+  }
+  .end {
+    margin-top: 0;
+    font-size: 30px;
+  }
+}
+
+.active {
+  position: fixed;
+  top: 35%;
+  left: 15%;
+}

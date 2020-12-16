@@ -1,0 +1,46 @@
+@import "../../../styles/variable.scss";
+
+.desc {
+  font-size: 16px;
+  padding: 15px;
+}
+
+.divider {
+  width: 70px;
+  height: 4px;
+  background: #000000;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: calc(40% + 40px);
+  left: 15%;
+  z-index: 100;
+  transition: transform ease-in-out $transition-duration $transition-duration,
+    opacity ease-in-out $quick-transition-duration $transition-duration;
+}
+
+.activeDivider {
+  opacity: 1;
+  visibility: visible;
+  transform-origin: 0 0 0;
+  transform: translateY(-40px);
+}
+
+.desc2 {
+  font-size: 20px;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: calc(40% + 60px);
+  left: 15%;
+  z-index: 100;
+  transition: transform ease-in-out $transition-duration $transition-duration,
+    opacity ease-in-out $quick-transition-duration $transition-duration;
+}
+
+.activeDesc2 {
+  opacity: 1;
+  visibility: visible;
+  transform-origin: 0 0 0;
+  transform: translateY(-40px);
+}
