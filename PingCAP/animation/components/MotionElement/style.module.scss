@@ -1,3 +1,5 @@
+@import "../../styles/variable.scss";
+
 .hidden {
   visibility: hidden;
 }
@@ -5,8 +7,8 @@
   visibility: hidden;
 }
 .motionElement {
-  position: fixed;
+  position: fixed !important;
   transform-origin: 0 0 0;
-  transition: transform ease-in-out 0.5s;
-  z-index: 100;
+  transition: all ease-in-out $transition-duration;
+  z-index: 100 !important;
 }

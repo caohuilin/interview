@@ -41,7 +41,7 @@ export default function MotionElementGroup(
     }
   }, [isActive]);
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     switch (status) {
       case MotionStatus.Calculating:
         setStatus(MotionStatus.Animating);

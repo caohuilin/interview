@@ -12,7 +12,12 @@ import { MotionContext, MotionStatus } from "../MotionElementGroup";
 
 import styles from "./style.module.scss";
 
-type RenderFunc = () => React.ReactChild;
+export enum ElementStatus {
+  Init = "init",
+  End = "end",
+}
+
+type RenderFunc = (status?: ElementStatus) => React.ReactChild;
 
 interface IMotionElementnProps {
   /**
@@ -23,6 +28,10 @@ interface IMotionElementnProps {
    * 激活状态类名
    */
   activeClassName: string;
+  /**
+   * 忽略放大缩小变化
+   */
+  ignoreScale?: boolean;
   children: RenderFunc;
 }
 
@@ -31,6 +40,7 @@ type RenderRefMap = { [key in MotionStatus]?: RenderFunc };
 export default function MotionElement({
   initClassName,
   activeClassName,
+  ignoreScale = false,
   children,
 }: IMotionElementnProps) {
   const { status } = useContext(MotionContext);
@@ -48,6 +58,7 @@ export default function MotionElement({
     scaleY: 1,
   });
   const [isAnimating, setIsAnimating] = useState(false); // 标记是否在动画中
+  const [needReCompute, setNeedReCompute] = useState(false); // 标记是否需要重新计算样式
 
   useEffect(() => {
     if (status === MotionStatus.Initial) {
@@ -57,7 +68,7 @@ export default function MotionElement({
     }
   }, [status]);
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     if (status === MotionStatus.Reseting) {
       setPositionStyle({ top: 0, left: 0 });
       setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
@@ -67,7 +78,20 @@ export default function MotionElement({
       const box = initElement.current.getBoundingClientRect();
       setPositionStyle({ top: box.top, left: box.left });
     }
-  }, [status]);
+  }, [status, needReCompute]);
+
+  const handleReComputeStyle = () => {
+    setNeedReCompute(true);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleReComputeStyle);
+    window.addEventListener("resize", handleReComputeStyle);
+    return () => {
+      window.removeEventListener("scroll", handleReComputeStyle);
+      window.removeEventListener("resize", handleReComputeStyle);
+    };
+  }, []);
 
   const transformStyle = useMemo(() => {
     let { x, y, scaleX, scaleY } = transformParams;
@@ -86,14 +110,17 @@ export default function MotionElement({
       const doneBox = doneElement.current.getBoundingClientRect();
       x = doneBox.left - initBox.left;
       y = doneBox.top - initBox.top;
-      scaleX = doneBox.width / initBox.width;
-      scaleY = doneBox.height / initBox.height;
+      if (!ignoreScale) {
+        scaleX = doneBox.width / initBox.width;
+        scaleY = doneBox.height / initBox.height;
+      }
     }
     setTransformParams({ x, y, scaleX, scaleY });
+    setNeedReCompute(false);
     return {
       transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY}) `,
     };
-  }, [status]);
+  }, [status, ignoreScale, needReCompute]);
 
   const handleTransitionEnd = useCallback(() => {
     if (
@@ -106,8 +133,12 @@ export default function MotionElement({
 
   const { initial } = render.current;
   const isInitial = status === MotionStatus.Initial;
+  const isCalculating = status === MotionStatus.Calculating;
   const showInitial =
     (isInitial && !isAnimating) || status === MotionStatus.Calculating;
+  const elementStatus =
+    isInitial || isCalculating ? ElementStatus.Init : ElementStatus.End;
+
   return (
     <>
       {/**
@@ -117,7 +148,7 @@ export default function MotionElement({
         ref={initElement}
         className={classnames(initClassName, { [styles.hidden]: !showInitial })}
       >
-        {initial ? initial() : children()}
+        {initial ? initial(ElementStatus.Init) : children(ElementStatus.Init)}
       </div>
       {/**
        *  终止状态 div
@@ -127,7 +158,7 @@ export default function MotionElement({
           ref={doneElement}
           className={classnames(activeClassName, styles.doneElement)}
         >
-          {children()}
+          {children(ElementStatus.End)}
         </div>
       )}
       {/**
@@ -139,7 +170,7 @@ export default function MotionElement({
           style={{ ...positionStyle, ...transformStyle }}
           onTransitionEnd={handleTransitionEnd}
         >
-          {initial ? initial() : children()}
+          {initial ? initial(elementStatus) : children(elementStatus)}
         </div>
       )}
     </>
