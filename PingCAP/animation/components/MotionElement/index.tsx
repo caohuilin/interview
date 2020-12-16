@@ -58,6 +58,7 @@ export default function MotionElement({
     scaleY: 1,
   });
   const [isAnimating, setIsAnimating] = useState(false); // 标记是否在动画中
+  const [needReCompute, setNeedReCompute] = useState(false); // 标记是否需要重新计算样式
 
   useEffect(() => {
     if (status === MotionStatus.Initial) {
@@ -67,7 +68,7 @@ export default function MotionElement({
     }
   }, [status]);
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     if (status === MotionStatus.Reseting) {
       setPositionStyle({ top: 0, left: 0 });
       setTransformParams({ x: 0, y: 0, scaleX: 1, scaleY: 1 });
@@ -77,7 +78,20 @@ export default function MotionElement({
       const box = initElement.current.getBoundingClientRect();
       setPositionStyle({ top: box.top, left: box.left });
     }
-  }, [status]);
+  }, [status, needReCompute]);
+
+  const handleReComputeStyle = () => {
+    setNeedReCompute(true);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleReComputeStyle);
+    window.addEventListener("resize", handleReComputeStyle);
+    return () => {
+      window.removeEventListener("scroll", handleReComputeStyle);
+      window.removeEventListener("resize", handleReComputeStyle);
+    };
+  }, []);
 
   const transformStyle = useMemo(() => {
     let { x, y, scaleX, scaleY } = transformParams;
@@ -102,10 +116,11 @@ export default function MotionElement({
       }
     }
     setTransformParams({ x, y, scaleX, scaleY });
+    setNeedReCompute(false);
     return {
       transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY}) `,
     };
-  }, [status, ignoreScale]);
+  }, [status, ignoreScale, needReCompute]);
 
   const handleTransitionEnd = useCallback(() => {
     if (
