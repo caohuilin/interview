@@ -12,7 +12,12 @@ import { MotionContext, MotionStatus } from "../MotionElementGroup";
 
 import styles from "./style.module.scss";
 
-type RenderFunc = () => React.ReactChild;
+export enum ElementStatus {
+  Init = "init",
+  End = "end",
+}
+
+type RenderFunc = (status?: ElementStatus) => React.ReactChild;
 
 interface IMotionElementnProps {
   /**
@@ -106,8 +111,12 @@ export default function MotionElement({
 
   const { initial } = render.current;
   const isInitial = status === MotionStatus.Initial;
+  const isCalculating = status === MotionStatus.Calculating;
   const showInitial =
     (isInitial && !isAnimating) || status === MotionStatus.Calculating;
+  const elementStatus =
+    isInitial || isCalculating ? ElementStatus.Init : ElementStatus.End;
+
   return (
     <>
       {/**
@@ -139,7 +148,7 @@ export default function MotionElement({
           style={{ ...positionStyle, ...transformStyle }}
           onTransitionEnd={handleTransitionEnd}
         >
-          {initial ? initial() : children()}
+          {initial ? initial(elementStatus) : children(elementStatus)}
         </div>
       )}
     </>
